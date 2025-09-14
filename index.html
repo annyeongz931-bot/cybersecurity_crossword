@@ -1,212 +1,217 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cybersecurity Crossword</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cyberthreats Crossword</title>
   <style>
-    :root {
-      --bg-color: #121212;
-      --text-color: #ffffff;
-      --cell-border: #555;
-      --cell-bg: #1e1e1e;
-      --number-color: #ccc;
-      --clue-bg: #222;
+    :root{
+      --bg1:#1a001a;
+      --bg2:#330033;
+      --accent:#ff66cc;
+      --muted:#aaa;
     }
-    body.light {
-      --bg-color: #f4f4f9;
-      --text-color: #000000;
-      --cell-border: #999;
-      --cell-bg: #ffffff;
-      --number-color: #333;
-      --clue-bg: #fff;
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui;
+      background:linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:#fff;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      padding:20px;
     }
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      margin: 20px;
-      transition: background-color 0.6s ease, color 0.6s ease;
-    }
-    h1 {
-      color: #bb86fc;
-      transition: color 0.6s ease;
-    }
-    table {
-      margin: 20px auto;
-      border-collapse: collapse;
-      transition: all 0.6s ease;
-    }
-    td {
-      width: 40px;
-      height: 40px;
-      border: 1px solid var(--cell-border);
-      text-align: center;
-      vertical-align: middle;
-      font-size: 18px;
-      position: relative;
-      cursor: pointer;
-      background-color: var(--cell-bg);
-      transition: background-color 0.6s ease, border 0.6s ease;
-    }
-    td.black {
-      background-color: black;
-      cursor: default;
-    }
-    td.number::before {
-      content: attr(data-number);
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      font-size: 10px;
-      color: var(--number-color);
-      transition: color 0.6s ease;
-    }
-    #clueBox {
-      margin-top: 20px;
-      padding: 10px;
-      border: 2px solid #bb86fc;
-      background: var(--clue-bg);
-      display: none;
-      width: 60%;
-      margin-left: auto;
-      margin-right: auto;
-      transition: background 0.6s ease, border 0.6s ease, color 0.6s ease;
-    }
-    #toggleMode {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      background: #bb86fc;
-      color: #fff;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.3s, transform 0.2s;
-    }
-    #toggleMode:hover {
-      background: #9b67d0;
-      transform: scale(1.05);
+    .wrap{max-width:1100px;width:100%;}
+    h1{color:var(--accent);margin:0 0 10px;}
+    p.lead{color:var(--muted);margin:0 0 20px;}
+
+    .boardWrap{display:flex;gap:20px;align-items:flex-start}
+    .grid{background:rgba(0,0,0,0.3);padding:10px;border-radius:10px;}
+    .cells{display:grid;grid-template-columns:repeat(20,32px);grid-auto-rows:32px;gap:3px}
+    .cell{width:32px;height:32px;background:#111;border:1px solid rgba(255,102,204,0.3);
+          border-radius:4px;display:flex;align-items:center;justify-content:center;
+          position:relative;box-shadow:0 0 6px rgba(255,102,204,0.4);}
+    .cell.block{background:transparent;border:0;box-shadow:none}
+    .cell input{width:100%;height:100%;border:0;background:transparent;color:#fff;
+                text-transform:uppercase;font-weight:700;font-size:14px;text-align:center;outline:none}
+    .cell input:disabled{color:var(--accent);font-weight:700;background:#222 !important;}
+    .cell.editable input{background:rgba(255,255,255,0.08);} /* 可输入格子浅色背景 */
+    .cell .num{position:absolute;left:2px;top:0;font-size:10px;color:var(--accent)}
+
+    .side{width:340px}
+    .clues{background:rgba(0,0,0,0.4);padding:12px;border-radius:10px;}
+    .clues h2{margin:6px 0;color:var(--accent);font-size:16px}
+    .list{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px}
+    .clueBtn{background:transparent;border:1px solid rgba(255,102,204,0.4);
+             padding:6px 8px;border-radius:6px;cursor:pointer;color:#fff;font-weight:600}
+    .controls{display:flex;gap:8px;margin-top:12px}
+    button.btn{background:var(--accent);border:0;color:#000;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:700}
+    button.ghost{background:transparent;border:1px solid rgba(255,102,204,0.4);color:var(--muted)}
+    .status{margin-top:10px;color:var(--muted);font-size:14px}
+    @media(max-width:980px){.boardWrap{flex-direction:column}.side{width:100%}}
+
+    /* Tooltip */
+    .tooltip{
+      position:absolute;
+      background:#222;
+      border:1px solid var(--accent);
+      padding:6px 10px;
+      border-radius:6px;
+      font-size:13px;
+      color:#fff;
+      box-shadow:0 0 10px var(--accent);
+      z-index:2000;
+      max-width:220px;
     }
   </style>
 </head>
 <body>
-  <button id="toggleMode">☀️ Light Mode</button>
-  <h1>Cybersecurity Crossword</h1>
-  <table>
-    <tr>
-      <td class="number" data-number="1" onclick="showClue('Using fraudulent emails to steal information.')">P</td>
-      <td>H</td>
-      <td>I</td>
-      <td>S</td>
-      <td>H</td>
-      <td>I</td>
-      <td>N</td>
-      <td>G</td>
-    </tr>
-    <tr>
-      <td class="number" data-number="2" onclick="showClue('Creating a believable scenario to extract information.')">R</td>
-      <td class="black"></td>
-      <td class="number" data-number="2" onclick="showClue('Using enticing offers to lure victims into traps.')">B</td>
-      <td>A</td>
-      <td>I</td>
-      <td>T</td>
-      <td>I</td>
-      <td>N</td>
-      <td>G</td>
-    </tr>
-    <tr>
-      <td class="number" data-number="6" onclick="showClue('A highly skilled computer professional who bypasses security measures to gain unauthorized access, often with malicious intent.')">H</td>
-      <td class="black"></td>
-      <td class="number" data-number="3" onclick="showClue('Any software or program intentionally designed to cause harm to a computer, system, or user.')">M</td>
-      <td>A</td>
-      <td>L</td>
-      <td>W</td>
-      <td>A</td>
-      <td>R</td>
-      <td>E</td>
-    </tr>
-    <tr>
-      <td>A</td>
-      <td class="black"></td>
-      <td class="number" data-number="4" onclick="showClue('An attempt to defraud a person or group after first gaining their trust.')">S</td>
-      <td>C</td>
-      <td>A</td>
-      <td>M</td>
-    </tr>
-    <tr>
-      <td>C</td>
-      <td class="black"></td>
-      <td class="number" data-number="5" onclick="showClue('Using text messages to trick victims.')">S</td>
-      <td>M</td>
-      <td>I</td>
-      <td>S</td>
-      <td>H</td>
-      <td>I</td>
-      <td>N</td>
-      <td>G</td>
-    </tr>
-    <tr>
-      <td>K</td>
-      <td class="black"></td>
-      <td class="number" data-number="2" onclick="showClue('The criminal takes advantage of the relationship and tricks the victim into giving them money, extracting personal information, or installing malware.')">H</td>
-      <td>O</td>
-      <td>N</td>
-      <td>E</td>
-      <td>Y</td>
-      <td>T</td>
-      <td>R</td>
-      <td>A</td>
-      <td>P</td>
-    </tr>
-    <tr>
-      <td>E</td>
-      <td class="black"></td>
-      <td class="number" data-number="3" onclick="showClue('Gaining unauthorized physical access.')">T</td>
-      <td>A</td>
-      <td>I</td>
-      <td>L</td>
-      <td>G</td>
-      <td>A</td>
-      <td>T</td>
-      <td>I</td>
-      <td>N</td>
-      <td>G</td>
-    </tr>
-    <tr>
-      <td>R</td>
-      <td class="black"></td>
-      <td class="number" data-number="4" onclick="showClue('Using voice calls to trick victims.')">V</td>
-      <td>I</td>
-      <td>S</td>
-      <td>H</td>
-      <td>I</td>
-      <td>N</td>
-      <td>G</td>
-    </tr>
-  </table>
+<div class="wrap">
+  <h1>Cyberthreats Crossword</h1>
+  <p class="lead">Click a number to highlight a word. First letters and intersections are pre-filled.</p>
 
-  <div id="clueBox"></div>
+  <div class="boardWrap">
+    <div class="grid"><div class="cells" id="cells"></div></div>
+    <div class="side">
+      <div class="clues">
+        <h2>Clues</h2>
+        <div class="list" id="wordList"></div>
+        <div class="controls">
+          <button class="btn" id="checkBtn">Check</button>
+          <button class="ghost" id="revealBtn">Reveal</button>
+          <button class="ghost" id="resetBtn">Reset</button>
+        </div>
+        <div class="status" id="status">Ready</div>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <script>
-    function showClue(clue) {
-      const box = document.getElementById("clueBox");
-      box.style.display = "block";
-      box.innerText = clue;
-    }
+<script>
+const SIZE=20;
+const WORDS=[
+ {num:1,word:'PHISHING',clue:'Using fraudulent emails to steal information.',row:2,col:5,dir:'across'},
+ {num:2,word:'BAITING',clue:'Using enticing offers to lure victims into traps.',row:5,col:2,dir:'across'},
+ {num:3,word:'MALWARE',clue:'Any software designed to harm.',row:13,col:1,dir:'across'},
+ {num:4,word:'SCAM',clue:'An attempt to defraud after gaining trust.',row:3,col:3,dir:'down'},
+ {num:5,word:'PRETEXTING',clue:'Creating a believable scenario to extract information.',row:2,col:5,dir:'down'},
+ {num:6,word:'HONEYTRAP',clue:'Exploiting relationships to trick victims.',row:10,col:7,dir:'down'},
+ {num:7,word:'TAILGATING',clue:'Gaining unauthorized physical access.',row:8,col:2,dir:'down'},
+ {num:8,word:'VISHING',clue:'Using voice calls to trick victims.',row:1,col:10,dir:'down'},
+ {num:9,word:'SMISHING',clue:'Using text messages to trick victims.',row:3,col:10,dir:'across'},
+ {num:10,word:'HACKER',clue:'A skilled person bypassing security.',row:4,col:1,dir:'across'}
+];
 
-    const toggleBtn = document.getElementById("toggleMode");
-    toggleBtn.addEventListener("click", () => {
-      document.body.classList.toggle("light");
-      if (document.body.classList.contains("light")) {
-        toggleBtn.textContent = "🌙 Dark Mode";
-      } else {
-        toggleBtn.textContent = "☀️ Light Mode";
+// build grid
+const grid=Array.from({length:SIZE},()=>Array.from({length:SIZE},()=>({ch:'',filled:false,num:null})));
+function placeWords(){
+  for(const w of WORDS){
+    let r=w.row-1,c=w.col-1;
+    for(let i=0;i<w.word.length;i++){
+      const rr=w.dir==='across'?r:r+i;
+      const cc=w.dir==='across'?c+i:c;
+      const cell=grid[rr][cc];
+      const existed = cell.ch !== '';
+      // only set ch if this cell was empty before (avoid overwriting)
+      if(!existed) cell.ch = w.word[i];
+      if(i===0) cell.num=w.num;
+      // prefill only if it's the first letter OR it was already occupied (intersection)
+      if(i===0 || existed){
+        cell.filled=true;
       }
-    });
-  </script>
+    }
+  }
+}
+placeWords();
+
+// render
+const cellsEl=document.getElementById('cells');
+for(let r=0;r<SIZE;r++){
+  for(let c=0;c<SIZE;c++){
+    const cellEl=document.createElement('div');
+    cellEl.className='cell';
+    const cell=grid[r][c];
+    if(!cell.ch){cellEl.classList.add('block');cellsEl.appendChild(cellEl);continue;}
+    const input=document.createElement('input');
+    input.maxLength=1;
+    input.dataset.ans=cell.ch;
+    if(cell.filled){
+      input.value=cell.ch;
+      input.disabled=true;
+    } else {
+      cellEl.classList.add('editable');
+    }
+    if(cell.num){const n=document.createElement('div');n.className='num';n.textContent=cell.num;cellEl.appendChild(n);}
+    cellEl.appendChild(input);
+    cellsEl.appendChild(cellEl);
+  }
+}
+
+// Clues list
+const wordListEl=document.getElementById('wordList');
+let tooltip=null;
+WORDS.forEach(w=>{
+  const btn=document.createElement('button');
+  btn.className='clueBtn';
+  btn.textContent=w.num;
+  btn.addEventListener('click',()=>showTooltip(w));
+  wordListEl.appendChild(btn);
+});
+
+function showTooltip(w){
+  document.querySelectorAll('.cell').forEach(el=>el.style.outline='');
+  if(tooltip){tooltip.remove();tooltip=null;}
+  let r=w.row-1,c=w.col-1;
+  for(let i=0;i<w.word.length;i++){
+    const rr=w.dir==='across'?r:r+i;
+    const cc=w.dir==='across'?c+i:c;
+    const idx=rr*SIZE+cc;
+    cellsEl.children[idx].style.outline='2px solid var(--accent)';
+  }
+  // tooltip 在单词中间位置
+  const mid=Math.floor(w.word.length/2);
+  const rr=w.dir==='across'?r:r+mid;
+  const cc=w.dir==='across'?c+mid:c;
+  const target=cellsEl.children[rr*SIZE+cc];
+  const rect=target.getBoundingClientRect();
+  tooltip=document.createElement('div');
+  tooltip.className='tooltip';
+  tooltip.textContent=w.num+". "+w.clue;
+  tooltip.style.top=(window.scrollY+rect.top-45)+"px";
+  tooltip.style.left=(window.scrollX+rect.left)+"px";
+  document.body.appendChild(tooltip);
+}
+
+// check/reveal/reset
+document.getElementById('checkBtn').onclick=()=>{
+  let total=0,correct=0;
+  document.querySelectorAll('.cell input').forEach(inp=>{
+    if(inp.disabled) return;
+    total++;
+    if(inp.value.toUpperCase()===inp.dataset.ans){inp.style.background='rgba(0,255,128,0.2)';correct++;}
+    else if(inp.value) inp.style.background='rgba(255,0,0,0.2)';
+    else inp.style.background='';
+  });
+  document.getElementById('status').textContent=`Correct: ${correct}/${total}`;
+};
+document.getElementById('revealBtn').onclick=()=>{
+  document.querySelectorAll('.cell input').forEach(inp=>{
+    if(inp.disabled) return;
+    inp.value=inp.dataset.ans;
+    inp.style.background='transparent';
+  });
+  document.getElementById('status').textContent='All answers revealed.';
+};
+document.getElementById('resetBtn').onclick=()=>{
+  if(tooltip){tooltip.remove();tooltip=null;}
+  document.querySelectorAll('.cell input').forEach(inp=>{
+    if(inp.disabled) return;
+    inp.value='';
+    inp.style.background='transparent';
+  });
+  document.getElementById('status').textContent='Reset done.';
+};
+</script>
 </body>
 </html>
