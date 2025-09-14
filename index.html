@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybersecurity Crossword</title>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --text-color: #ffffff;
+      --cell-border: #555;
+      --cell-bg: #1e1e1e;
+      --number-color: #ccc;
+      --clue-bg: #222;
+    }
+    body.light {
+      --bg-color: #f4f4f9;
+      --text-color: #000000;
+      --cell-border: #999;
+      --cell-bg: #ffffff;
+      --number-color: #333;
+      --clue-bg: #fff;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 20px;
+      transition: background-color 0.6s ease, color 0.6s ease;
+    }
+    h1 {
+      color: #bb86fc;
+      transition: color 0.6s ease;
+    }
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      transition: all 0.6s ease;
+    }
+    td {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--cell-border);
+      text-align: center;
+      vertical-align: middle;
+      font-size: 18px;
+      position: relative;
+      cursor: pointer;
+      background-color: var(--cell-bg);
+      transition: background-color 0.6s ease, border 0.6s ease;
+    }
+    td.black {
+      background-color: black;
+      cursor: default;
+    }
+    td.number::before {
+      content: attr(data-number);
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      font-size: 10px;
+      color: var(--number-color);
+      transition: color 0.6s ease;
+    }
+    #clueBox {
+      margin-top: 20px;
+      padding: 10px;
+      border: 2px solid #bb86fc;
+      background: var(--clue-bg);
+      display: none;
+      width: 60%;
+      margin-left: auto;
+      margin-right: auto;
+      transition: background 0.6s ease, border 0.6s ease, color 0.6s ease;
+    }
+    #toggleMode {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: #bb86fc;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s, transform 0.2s;
+    }
+    #toggleMode:hover {
+      background: #9b67d0;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <button id="toggleMode">☀️ Light Mode</button>
+  <h1>Cybersecurity Crossword</h1>
+  <table>
+    <tr>
+      <td class="number" data-number="1" onclick="showClue('Using fraudulent emails to steal information.')">P</td>
+      <td>H</td>
+      <td>I</td>
+      <td>S</td>
+      <td>H</td>
+      <td>I</td>
+      <td>N</td>
+      <td>G</td>
+    </tr>
+    <tr>
+      <td class="number" data-number="2" onclick="showClue('Creating a believable scenario to extract information.')">R</td>
+      <td class="black"></td>
+      <td class="number" data-number="2" onclick="showClue('Using enticing offers to lure victims into traps.')">B</td>
+      <td>A</td>
+      <td>I</td>
+      <td>T</td>
+      <td>I</td>
+      <td>N</td>
+      <td>G</td>
+    </tr>
+    <tr>
+      <td class="number" data-number="6" onclick="showClue('A highly skilled computer professional who bypasses security measures to gain unauthorized access, often with malicious intent.')">H</td>
+      <td class="black"></td>
+      <td class="number" data-number="3" onclick="showClue('Any software or program intentionally designed to cause harm to a computer, system, or user.')">M</td>
+      <td>A</td>
+      <td>L</td>
+      <td>W</td>
+      <td>A</td>
+      <td>R</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <td>A</td>
+      <td class="black"></td>
+      <td class="number" data-number="4" onclick="showClue('An attempt to defraud a person or group after first gaining their trust.')">S</td>
+      <td>C</td>
+      <td>A</td>
+      <td>M</td>
+    </tr>
+    <tr>
+      <td>C</td>
+      <td class="black"></td>
+      <td class="number" data-number="5" onclick="showClue('Using text messages to trick victims.')">S</td>
+      <td>M</td>
+      <td>I</td>
+      <td>S</td>
+      <td>H</td>
+      <td>I</td>
+      <td>N</td>
+      <td>G</td>
+    </tr>
+    <tr>
+      <td>K</td>
+      <td class="black"></td>
+      <td class="number" data-number="2" onclick="showClue('The criminal takes advantage of the relationship and tricks the victim into giving them money, extracting personal information, or installing malware.')">H</td>
+      <td>O</td>
+      <td>N</td>
+      <td>E</td>
+      <td>Y</td>
+      <td>T</td>
+      <td>R</td>
+      <td>A</td>
+      <td>P</td>
+    </tr>
+    <tr>
+      <td>E</td>
+      <td class="black"></td>
+      <td class="number" data-number="3" onclick="showClue('Gaining unauthorized physical access.')">T</td>
+      <td>A</td>
+      <td>I</td>
+      <td>L</td>
+      <td>G</td>
+      <td>A</td>
+      <td>T</td>
+      <td>I</td>
+      <td>N</td>
+      <td>G</td>
+    </tr>
+    <tr>
+      <td>R</td>
+      <td class="black"></td>
+      <td class="number" data-number="4" onclick="showClue('Using voice calls to trick victims.')">V</td>
+      <td>I</td>
+      <td>S</td>
+      <td>H</td>
+      <td>I</td>
+      <td>N</td>
+      <td>G</td>
+    </tr>
+  </table>
+
+  <div id="clueBox"></div>
+
+  <script>
+    function showClue(clue) {
+      const box = document.getElementById("clueBox");
+      box.style.display = "block";
+      box.innerText = clue;
+    }
+
+    const toggleBtn = document.getElementById("toggleMode");
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("light");
+      if (document.body.classList.contains("light")) {
+        toggleBtn.textContent = "🌙 Dark Mode";
+      } else {
+        toggleBtn.textContent = "☀️ Light Mode";
+      }
+    });
+  </script>
+</body>
+</html>
